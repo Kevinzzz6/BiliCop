@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图标尺寸调整工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .file-input {
+            display: none;
+        }
+        .upload-btn {
+            background: #00A1D6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .upload-btn:hover {
+            background: #0086b3;
+        }
+        .preview-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .preview-img {
+            max-width: 200px;
+            max-height: 200px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+        }
+        .generate-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .generate-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        .generate-btn:hover {
+            background: #218838;
+        }
+        .generate-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            color: #495057;
+            margin-top: 0;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 8px 0;
+            color: #6c757d;
+        }
+        .status {
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .canvas-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 图标尺寸调整工具</h1>
+        
+        <div class="instructions">
+            <h3>使用说明：</h3>
+            <ol>
+                <li>点击"选择图标文件"按钮，选择您的128x128 PNG图标</li>
+                <li>预览上传的图标</li>
+                <li>点击生成按钮创建不同尺寸的图标</li>
+                <li>将生成的图标文件保存到插件的icons目录中</li>
+            </ol>
+        </div>
+
+        <div class="upload-section">
+            <input type="file" id="fileInput" class="file-input" accept="image/png">
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                📁 选择图标文件
+            </button>
+        </div>
+
+        <div class="preview-section">
+            <div id="previewContainer" style="display: none;">
+                <h3>预览：</h3>
+                <img id="previewImg" class="preview-img" alt="图标预览">
+            </div>
+        </div>
+
+        <div class="generate-section">
+            <button id="generate16" class="generate-btn" disabled>生成 16x16 图标</button>
+            <button id="generate48" class="generate-btn" disabled>生成 48x48 图标</button>
+            <button id="generate128" class="generate-btn" disabled>生成 128x128 图标</button>
+        </div>
+
+        <div id="status" class="status" style="display: none;"></div>
+
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let uploadedImage = null;
+        const fileInput = document.getElementById('fileInput');
+        const previewImg = document.getElementById('previewImg');
+        const previewContainer = document.getElementById('previewContainer');
+        const generate16 = document.getElementById('generate16');
+        const generate48 = document.getElementById('generate48');
+        const generate128 = document.getElementById('generate128');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const status = document.getElementById('status');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (!file.type.match('image.*')) {
+                showStatus('请选择PNG格式的图片文件', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    uploadedImage = img;
+                    previewImg.src = event.target.result;
+                    previewContainer.style.display = 'block';
+                    
+                    // 启用生成按钮
+                    generate16.disabled = false;
+                    generate48.disabled = false;
+                    generate128.disabled = false;
+                    
+                    showStatus('图标上传成功！可以生成不同尺寸的图标了', 'success');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function generateIcon(size) {
+            if (!uploadedImage) {
+                showStatus('请先上传图标文件', 'error');
+                return;
+            }
+
+            try {
+                // 设置canvas尺寸
+                canvas.width = size;
+                canvas.height = size;
+                
+                // 清除canvas
+                ctx.clearRect(0, 0, size, size);
+                
+                // 绘制图像
+                ctx.drawImage(uploadedImage, 0, 0, size, size);
+                
+                // 生成下载链接
+                const link = document.createElement('a');
+                link.download = `icon${size}.png`;
+                link.href = canvas.toDataURL('image/png');
+                
+                // 触发下载
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showStatus(`${size}x${size} 图标生成成功！`, 'success');
+                
+            } catch (error) {
+                showStatus(`生成图标失败: ${error.message}`, 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+
+        // 绑定生成按钮事件
+        generate16.addEventListener('click', () => generateIcon(16));
+        generate48.addEventListener('click', () => generateIcon(48));
+        generate128.addEventListener('click', () => generateIcon(128));
+
+        // 拖拽上传功能
+        const container = document.querySelector('.container');
+        
+        container.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            container.style.backgroundColor = '#f0f8ff';
+        });
+        
+        container.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            container.style.backgroundColor = 'white';
+        });
+        
+        container.addEventListener('drop', (e) => {
+            e.preventDefault();
+            container.style.backgroundColor = 'white';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+</body>
+</html>

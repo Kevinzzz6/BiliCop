@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "B站侵权举报助手",
+  "version": "1.0.0",
+  "description": "一键举报B站侵权内容，自动抓取证据并提交举报",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "activeTab",
+    "webNavigation",
+    "contextMenus",
+    "notifications",
+    "alarms",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://www.bilibili.com/*",
+    "https://bilibili.com/*",
+    "https://message.bilibili.com/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker-simple.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.bilibili.com/video/*",
+        "https://www.bilibili.com/*",
+        "https://bilibili.com/video/*",
+        "https://bilibili.com/*"
+      ],
+      "js": [
+        "content_scripts/injector.js",
+        "content_scripts/bilibili_scraper.js"
+      ],
+      "css": [
+        "content_scripts/injector.css"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "B站侵权举报助手",
+    "default_icon": "icons/icon128.png"
+  },
+  "icons": {
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["pages/*"],
+      "matches": ["https://www.bilibili.com/*"]
+    }
+  ]
+}

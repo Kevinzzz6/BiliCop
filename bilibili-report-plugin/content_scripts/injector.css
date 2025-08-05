@@ -1,0 +1,370 @@
+/* B站侵权举报助手 - 内容脚本样式 */
+
+/* 举报按钮容器 */
+.bilibili-report-plugin-container {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* 举报按钮样式 */
+.bilibili-report-plugin-btn {
+    background: linear-gradient(135deg, #00A1D6 0%, #0086b3 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 161, 214, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.bilibili-report-plugin-btn:hover {
+    background: linear-gradient(135deg, #0086b3 0%, #006d94 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 161, 214, 0.3);
+}
+
+.bilibili-report-plugin-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 161, 214, 0.2);
+}
+
+/* 悬浮按钮样式 */
+.bilibili-report-plugin-floating {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #00A1D6 0%, #0086b3 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 161, 214, 0.4);
+    z-index: 9999;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+}
+
+.bilibili-report-plugin-floating:hover {
+    background: linear-gradient(135deg, #0086b3 0%, #006d94 100%);
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(0, 161, 214, 0.5);
+}
+
+.bilibili-report-plugin-floating:active {
+    transform: scale(1.05) rotate(0deg);
+}
+
+/* 数据高亮样式 */
+.bilibili-report-plugin-highlight {
+    background: rgba(255, 193, 7, 0.2);
+    border: 2px solid #FFC107;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+}
+
+.bilibili-report-plugin-highlight:hover {
+    background: rgba(255, 193, 7, 0.3);
+    border-color: #FF9800;
+}
+
+/* 证据标记样式 */
+.bilibili-report-plugin-evidence-marker {
+    position: relative;
+    display: inline-block;
+}
+
+.bilibili-report-plugin-evidence-marker::after {
+    content: '📋';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #FF5722;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+}
+
+/* 加载动画 */
+.bilibili-report-plugin-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.bilibili-report-plugin-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: bilibili-report-plugin-spin 0.8s linear infinite;
+}
+
+@keyframes bilibili-report-plugin-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 通知样式 */
+.bilibili-report-plugin-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10000;
+    max-width: 320px;
+    word-wrap: break-word;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+}
+
+.bilibili-report-plugin-notification.success {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.bilibili-report-plugin-notification.error {
+    background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+}
+
+.bilibili-report-plugin-notification.warning {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.bilibili-report-plugin-notification.info {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* 报告对话框增强样式 */
+.bilibili-report-plugin-enhanced-dialog {
+    border: 2px solid #00A1D6;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 161, 214, 0.3);
+}
+
+.bilibili-report-plugin-enhanced-dialog .dialog-header {
+    background: linear-gradient(135deg, #00A1D6 0%, #0086b3 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 10px 10px 0 0;
+}
+
+.bilibili-report-plugin-enhanced-dialog .form-group {
+    margin-bottom: 16px;
+}
+
+.bilibili-report-plugin-enhanced-dialog .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.bilibili-report-plugin-enhanced-dialog .form-input,
+.bilibili-report-plugin-enhanced-dialog .form-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.bilibili-report-plugin-enhanced-dialog .form-input:focus,
+.bilibili-report-plugin-enhanced-dialog .form-textarea:focus {
+    outline: none;
+    border-color: #00A1D6;
+    box-shadow: 0 0 0 3px rgba(0, 161, 214, 0.1);
+}
+
+.bilibili-report-plugin-enhanced-dialog .btn-primary {
+    background: linear-gradient(135deg, #00A1D6 0%, #0086b3 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bilibili-report-plugin-enhanced-dialog .btn-primary:hover {
+    background: linear-gradient(135deg, #0086b3 0%, #006d94 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 161, 214, 0.3);
+}
+
+/* 证据预览样式 */
+.bilibili-report-plugin-evidence-preview {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+}
+
+.bilibili-report-plugin-evidence-preview .preview-header {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bilibili-report-plugin-evidence-preview .preview-content {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.bilibili-report-plugin-evidence-preview .preview-meta {
+    font-size: 12px;
+    color: #adb5bd;
+    margin-top: 8px;
+}
+
+/* 进度条样式 */
+.bilibili-report-plugin-progress {
+    width: 100%;
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.bilibili-report-plugin-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00A1D6 0%, #0086b3 100%);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    animation: progress-animation 2s ease-in-out infinite;
+}
+
+@keyframes progress-animation {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .bilibili-report-plugin-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .bilibili-report-plugin-floating {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+        bottom: 16px;
+        right: 16px;
+    }
+    
+    .bilibili-report-plugin-notification {
+        right: 16px;
+        left: 16px;
+        max-width: none;
+    }
+}
+
+/* 暗色主题适配 */
+@media (prefers-color-scheme: dark) {
+    .bilibili-report-plugin-highlight {
+        background: rgba(255, 193, 7, 0.3);
+        border-color: #FFC107;
+    }
+    
+    .bilibili-report-plugin-evidence-preview {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .bilibili-report-plugin-evidence-preview .preview-header {
+        color: #e2e8f0;
+    }
+    
+    .bilibili-report-plugin-evidence-preview .preview-content {
+        color: #a0aec0;
+    }
+    
+    .bilibili-report-plugin-evidence-preview .preview-meta {
+        color: #718096;
+    }
+}
+
+/* 兼容性修复 */
+.bilibili-report-plugin-container * {
+    box-sizing: border-box;
+}
+
+.bilibili-report-plugin-btn:focus,
+.bilibili-report-plugin-floating:focus {
+    outline: 2px solid #00A1D6;
+    outline-offset: 2px;
+}
+
+/* 高对比度支持 */
+@media (prefers-contrast: high) {
+    .bilibili-report-plugin-btn {
+        border: 2px solid #006d94;
+    }
+    
+    .bilibili-report-plugin-floating {
+        border: 3px solid #ffffff;
+    }
+    
+    .bilibili-report-plugin-notification {
+        border: 2px solid currentColor;
+    }
+}

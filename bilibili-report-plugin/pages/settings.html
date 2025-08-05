@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - B站侵权举报助手</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #00A1D6 0%, #0086b3 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .settings-group {
+            margin-bottom: 30px;
+        }
+        
+        .settings-group h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .setting-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .setting-item label {
+            font-weight: 500;
+            min-width: 150px;
+            margin-right: 12px;
+        }
+        
+        .setting-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+        
+        .setting-item input[type="number"],
+        .setting-item select {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 120px;
+        }
+        
+        .setting-description {
+            font-size: 12px;
+            color: #666;
+            margin-left: 8px;
+            flex: 1;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #00A1D6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0086b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #00A1D6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .setting-item label {
+                min-width: auto;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>插件设置</h1>
+        </div>
+        
+        <div class="content">
+            <a href="dashboard.html" class="back-link">← 返回案件管理</a>
+            
+            <div class="settings-group">
+                <h2>通用设置</h2>
+                <div class="setting-item">
+                    <label for="autoCapture">自动抓取:</label>
+                    <input type="checkbox" id="autoCapture">
+                    <span class="setting-description">访问B站页面时自动抓取侵权信息</span>
+                </div>
+                <div class="setting-item">
+                    <label for="autoSubmit">自动提交:</label>
+                    <input type="checkbox" id="autoSubmit">
+                    <span class="setting-description">创建案件后自动提交举报</span>
+                </div>
+                <div class="setting-item">
+                    <label for="notifications">通知提醒:</label>
+                    <input type="checkbox" id="notifications">
+                    <span class="setting-description">显示操作成功/失败通知</span>
+                </div>
+                <div class="setting-item">
+                    <label for="debugMode">调试模式:</label>
+                    <input type="checkbox" id="debugMode">
+                    <span class="setting-description">启用调试日志和详细信息</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h2>高级设置</h2>
+                <div class="setting-item">
+                    <label for="apiTimeout">API超时时间(毫秒):</label>
+                    <input type="number" id="apiTimeout" min="1000" max="120000" step="1000">
+                </div>
+                <div class="setting-item">
+                    <label for="maxRetries">最大重试次数:</label>
+                    <input type="number" id="maxRetries" min="1" max="10" step="1">
+                </div>
+                <div class="setting-item">
+                    <label for="evidenceScreenshots">证据截图:</label>
+                    <input type="checkbox" id="evidenceScreenshots">
+                    <span class="setting-description">自动保存页面截图作为证据</span>
+                </div>
+                <div class="setting-item">
+                    <label for="reportTemplate">举报模板:</label>
+                    <select id="reportTemplate">
+                        <option value="default">默认模板</option>
+                        <option value="detailed">详细模板</option>
+                        <option value="simple">简洁模板</option>
+                        <option value="custom">自定义模板</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="language">界面语言:</label>
+                    <select id="language">
+                        <option value="zh-CN">简体中文</option>
+                        <option value="zh-TW">繁体中文</option>
+                        <option value="en-US">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="saveBtn" class="btn btn-primary">保存设置</button>
+                <button id="resetBtn" class="btn btn-secondary">重置默认</button>
+                <button id="clearBtn" class="btn btn-danger">清空数据</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SettingsManager {
+            constructor() {
+                this.settings = {};
+                this.init();
+            }
+
+            async init() {
+                await this.loadSettings();
+                this.bindEvents();
+                this.renderSettings();
+            }
+
+            async loadSettings() {
+                try {
+                    const response = await chrome.runtime.sendMessage({ action: 'getSettings' });
+                    if (response.success) {
+                        this.settings = response.settings;
+                    } else {
+                        console.error('加载设置失败:', response.error);
+                    }
+                } catch (error) {
+                    console.error('加载设置失败:', error);
+                }
+            }
+
+            bindEvents() {
+                document.getElementById('saveBtn').addEventListener('click', () => this.saveSettings());
+                document.getElementById('resetBtn').addEventListener('click', () => this.resetSettings());
+                document.getElementById('clearBtn').addEventListener('click', () => this.clearData());
+            }
+
+            renderSettings() {
+                const settings = this.settings;
+                
+                document.getElementById('autoCapture').checked = settings.autoCapture || false;
+                document.getElementById('autoSubmit').checked = settings.autoSubmit || false;
+                document.getElementById('notifications').checked = settings.notifications || false;
+                document.getElementById('debugMode').checked = settings.debugMode || false;
+                document.getElementById('apiTimeout').value = settings.apiTimeout || 30000;
+                document.getElementById('maxRetries').value = settings.maxRetries || 3;
+                document.getElementById('evidenceScreenshots').checked = settings.evidenceScreenshots || false;
+                document.getElementById('reportTemplate').value = settings.reportTemplate || 'default';
+                document.getElementById('language').value = settings.language || 'zh-CN';
+            }
+
+            async saveSettings() {
+                const newSettings = {
+                    autoCapture: document.getElementById('autoCapture').checked,
+                    autoSubmit: document.getElementById('autoSubmit').checked,
+                    notifications: document.getElementById('notifications').checked,
+                    debugMode: document.getElementById('debugMode').checked,
+                    apiTimeout: parseInt(document.getElementById('apiTimeout').value),
+                    maxRetries: parseInt(document.getElementById('maxRetries').value),
+                    evidenceScreenshots: document.getElementById('evidenceScreenshots').checked,
+                    reportTemplate: document.getElementById('reportTemplate').value,
+                    language: document.getElementById('language').value
+                };
+
+                const saveBtn = document.getElementById('saveBtn');
+                const originalText = saveBtn.textContent;
+                
+                saveBtn.textContent = '保存中...';
+                saveBtn.disabled = true;
+
+                try {
+                    const response = await chrome.runtime.sendMessage({
+                        action: 'updateSettings',
+                        settings: newSettings
+                    });
+
+                    if (response.success) {
+                        this.settings = newSettings;
+                        this.showNotification('设置保存成功', 'success');
+                    } else {
+                        this.showNotification('保存失败: ' + response.error, 'error');
+                    }
+                } catch (error) {
+                    this.showNotification('保存失败: ' + error.message, 'error');
+                } finally {
+                    saveBtn.textContent = originalText;
+                    saveBtn.disabled = false;
+                }
+            }
+
+            resetSettings() {
+                if (confirm('确定要重置所有设置为默认值吗？')) {
+                    const defaultSettings = {
+                        autoCapture: true,
+                        autoSubmit: false,
+                        notifications: true,
+                        debugMode: false,
+                        apiTimeout: 30000,
+                        maxRetries: 3,
+                        evidenceScreenshots: true,
+                        reportTemplate: 'default',
+                        language: 'zh-CN'
+                    };
+
+                    document.getElementById('autoCapture').checked = defaultSettings.autoCapture;
+                    document.getElementById('autoSubmit').checked = defaultSettings.autoSubmit;
+                    document.getElementById('notifications').checked = defaultSettings.notifications;
+                    document.getElementById('debugMode').checked = defaultSettings.debugMode;
+                    document.getElementById('apiTimeout').value = defaultSettings.apiTimeout;
+                    document.getElementById('maxRetries').value = defaultSettings.maxRetries;
+                    document.getElementById('evidenceScreenshots').checked = defaultSettings.evidenceScreenshots;
+                    document.getElementById('reportTemplate').value = defaultSettings.reportTemplate;
+                    document.getElementById('language').value = defaultSettings.language;
+
+                    this.saveSettings();
+                }
+            }
+
+            clearData() {
+                if (confirm('确定要清空所有案件数据吗？此操作不可撤销。')) {
+                    // 这里应该调用清空数据的API
+                    this.showNotification('数据清空功能需要在案件管理页面操作', 'info');
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                Object.assign(notification.style, {
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    padding: '12px 16px',
+                    borderRadius: '6px',
+                    color: 'white',
+                    fontSize: '14px',
+                    zIndex: '10000',
+                    maxWidth: '300px',
+                    wordWrap: 'break-word'
+                });
+
+                if (type === 'error') {
+                    notification.style.background = '#dc3545';
+                } else if (type === 'success') {
+                    notification.style.background = '#28a745';
+                } else {
+                    notification.style.background = '#17a2b8';
+                }
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new SettingsManager();
+        });
+    </script>
+</body>
+</html>

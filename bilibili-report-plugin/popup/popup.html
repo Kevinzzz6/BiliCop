@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B站侵权举报助手</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="../icons/icon48.png" alt="Logo" class="logo">
+            <h1>B站侵权举报助手</h1>
+        </div>
+        
+        <div class="status-section">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">检测页面中...</span>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <button id="captureBtn" class="primary-btn" disabled>
+                📸 抓取侵权信息
+            </button>
+            
+            <div id="capturedInfo" class="hidden">
+                <h3>已抓取信息</h3>
+                <div class="info-item">
+                    <label>视频标题:</label>
+                    <span id="videoTitle">-</span>
+                </div>
+                <div class="info-item">
+                    <label>UP主:</label>
+                    <span id="uploader">-</span>
+                </div>
+                <div class="info-item">
+                    <label>视频链接:</label>
+                    <span id="videoUrl" class="url-text">-</span>
+                </div>
+                <div class="info-item">
+                    <label>发布时间:</label>
+                    <span id="publishTime">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="case-section">
+            <button id="createCaseBtn" class="secondary-btn" disabled>
+                📁 创建新案件
+            </button>
+            
+            <div id="caseForm" class="hidden">
+                <h3>案件信息</h3>
+                <div class="form-group">
+                    <label for="originalWork">原创作品链接:</label>
+                    <input type="url" id="originalWork" placeholder="请输入您的原创作品链接">
+                </div>
+                <div class="form-group">
+                    <label for="evidenceDesc">侵权描述:</label>
+                    <textarea id="evidenceDesc" placeholder="请详细描述侵权情况..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button id="saveCaseBtn" class="primary-btn">保存案件</button>
+                    <button id="cancelCaseBtn" class="secondary-btn">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-section">
+            <button id="submitReportBtn" class="primary-btn" disabled>
+                ⚡ 一键提交举报
+            </button>
+        </div>
+
+        <div class="nav-section">
+            <button id="dashboardBtn" class="nav-btn">
+                📊 案件管理
+            </button>
+            <button id="settingsBtn" class="nav-btn">
+                ⚙️ 设置
+            </button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
